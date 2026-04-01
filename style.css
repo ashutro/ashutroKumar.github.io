@@ -246,6 +246,12 @@ section {
     text-align: left;
 }
 
+.stat-value {
+    display: flex;
+    align-items: baseline;
+    height: 60px;
+}
+
 .stat-item .counter,
 .stat-item span:not(.counter) {
     font-size: 2.5rem;
@@ -265,8 +271,6 @@ section {
     font-size: 3rem;
     font-weight: 800;
     color: var(--accent-blue);
-    display: inline-block;
-    transform: translateY(2px);
     margin-left: 2px;
 }
 
