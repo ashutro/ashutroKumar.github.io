@@ -57,12 +57,12 @@ body {
 }
 
 @keyframes float {
-    0% {
+    0%, 100% {
         transform: translateY(0) scale(1);
     }
 
-    100% {
-        transform: translateY(50px) scale(1.1);
+    50% {
+        transform: translateY(-15px) scale(1.05);
     }
 }
 
