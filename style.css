@@ -565,6 +565,10 @@ section {
         min-height: auto;
     }
 
+    #hero {
+        padding-top: 120px;
+    }
+
     .stats-container {
         flex-direction: column;
         gap: 1.5rem;
