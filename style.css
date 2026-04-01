@@ -57,12 +57,12 @@ body {
 }
 
 @keyframes float {
-    0%, 100% {
+    0% {
         transform: translateY(0) scale(1);
     }
 
-    50% {
-        transform: translateY(-15px) scale(1.05);
+    100% {
+        transform: translateY(50px) scale(1.1);
     }
 }
 
@@ -563,10 +563,6 @@ section {
     section {
         padding: 80px 0 40px;
         min-height: auto;
-    }
-
-    #hero {
-        padding-top: 120px;
     }
 
     .stats-container {
