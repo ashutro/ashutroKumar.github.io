@@ -746,3 +746,117 @@ section {
     color: var(--text-muted);
     font-size: 0.9rem;
 }
+
+/* ===== Engineering at Scale Section ===== */
+.scale-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.scale-metric-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.scale-metric-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-blue));
+    background-size: 200% 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: shimmer-border 3s ease infinite;
+}
+
+@keyframes shimmer-border {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.scale-metric-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent-purple);
+    box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
+}
+
+.scale-metric-card:hover::before {
+    opacity: 1;
+}
+
+.scale-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 1.2rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(139, 92, 246, 0.12));
+    color: var(--accent-blue);
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.scale-metric-card:hover .scale-icon {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(139, 92, 246, 0.22));
+    transform: scale(1.1);
+}
+
+.scale-value {
+    margin-bottom: 0.5rem;
+}
+
+.scale-counter {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -1px;
+    font-family: var(--font-sans);
+}
+
+.scale-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.scale-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+/* Responsive scale metrics */
+@media (max-width: 900px) {
+    .scale-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 550px) {
+    .scale-metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .scale-metric-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .scale-counter {
+        font-size: 2.2rem;
+    }
+}

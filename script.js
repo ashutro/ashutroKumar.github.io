@@ -157,10 +157,50 @@ document.addEventListener('DOMContentLoaded', () => {
     resizeCanvas();
     initParticles();
     animateParticles();
+
+    // Animate scale counters on scroll
+    let scaleCountersStarted = false;
+    const scaleSection = document.getElementById('scale');
+    if (scaleSection) {
+        const scaleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !scaleCountersStarted) {
+                    scaleCountersStarted = true;
+                    const scaleCounters = document.querySelectorAll('.scale-counter');
+                    scaleCounters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const suffix = counter.getAttribute('data-suffix') || '';
+                        const duration = 1500;
+                        const frameDuration = 16;
+                        const totalFrames = Math.round(duration / frameDuration);
+                        let frame = 0;
+
+                        const animate = () => {
+                            frame++;
+                            const progress = frame / totalFrames;
+                            // Ease-out cubic for smooth deceleration
+                            const easeOut = 1 - Math.pow(1 - progress, 3);
+                            const current = Math.round(easeOut * target);
+
+                            if (frame < totalFrames) {
+                                counter.textContent = current + suffix;
+                                requestAnimationFrame(animate);
+                            } else {
+                                counter.textContent = target + suffix;
+                            }
+                        };
+                        animate();
+                    });
+                    scaleObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        scaleObserver.observe(scaleSection);
+    }
 });
 
 // 3D Tilt Effect for Cards
-const cards = document.querySelectorAll('.project-card, .cert-card');
+const cards = document.querySelectorAll('.project-card, .cert-card, .scale-metric-card');
 cards.forEach(card => {
     card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
@@ -183,7 +223,7 @@ cards.forEach(card => {
 });
 
 // Flashlight Hover Effect
-document.querySelectorAll('.project-card, .cert-card').forEach(card => {
+document.querySelectorAll('.project-card, .cert-card, .scale-metric-card').forEach(card => {
     card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
