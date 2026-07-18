@@ -160,42 +160,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Animate scale counters on scroll
     let scaleCountersStarted = false;
+
+    function animateScaleCounters() {
+        if (scaleCountersStarted) return;
+        scaleCountersStarted = true;
+        const scaleCounters = document.querySelectorAll('.scale-counter');
+        scaleCounters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            const suffix = counter.getAttribute('data-suffix') || '';
+            const duration = 1200;
+            const startTime = performance.now();
+
+            counter.textContent = '0' + suffix;
+
+            const animate = (currentTime) => {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // Ease-out cubic
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(easeOut * target);
+                counter.textContent = current + suffix;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    counter.textContent = target + suffix;
+                }
+            };
+            requestAnimationFrame(animate);
+        });
+    }
+
     const scaleSection = document.getElementById('scale');
     if (scaleSection) {
         const scaleObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && !scaleCountersStarted) {
-                    scaleCountersStarted = true;
-                    const scaleCounters = document.querySelectorAll('.scale-counter');
-                    scaleCounters.forEach(counter => {
-                        const target = +counter.getAttribute('data-target');
-                        const suffix = counter.getAttribute('data-suffix') || '';
-                        const duration = 1500;
-                        const frameDuration = 16;
-                        const totalFrames = Math.round(duration / frameDuration);
-                        let frame = 0;
-
-                        const animate = () => {
-                            frame++;
-                            const progress = frame / totalFrames;
-                            // Ease-out cubic for smooth deceleration
-                            const easeOut = 1 - Math.pow(1 - progress, 3);
-                            const current = Math.round(easeOut * target);
-
-                            if (frame < totalFrames) {
-                                counter.textContent = current + suffix;
-                                requestAnimationFrame(animate);
-                            } else {
-                                counter.textContent = target + suffix;
-                            }
-                        };
-                        animate();
-                    });
+                if (entry.isIntersecting) {
+                    animateScaleCounters();
                     scaleObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.1 });
         scaleObserver.observe(scaleSection);
+
+        // Fallback: if observer never fires, animate after 3 seconds
+        setTimeout(() => { animateScaleCounters(); }, 3000);
     }
 });
 
