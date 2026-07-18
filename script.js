@@ -24,15 +24,16 @@ function startCounters() {
     const speed = 200;
 
     counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'), 10);
+        if (isNaN(target) || target <= 0) return;
         const updateCount = () => {
-            const target = +counter.getAttribute('data-target');
-            const count = +counter.innerText;
+            const count = +counter.textContent;
             const inc = target / speed;
             if (count < target) {
-                counter.innerText = Math.ceil(count + inc);
+                counter.textContent = Math.ceil(count + inc);
                 setTimeout(updateCount, 20);
             } else {
-                counter.innerText = target;
+                counter.textContent = target;
             }
         };
         updateCount();
@@ -50,9 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+        const href = this.getAttribute('href');
+        // Validate href is a safe CSS selector (only #word-chars)
+        if (href && /^#[\w-]+$/.test(href)) {
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
         }
     });
 });
